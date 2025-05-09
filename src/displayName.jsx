@@ -4,8 +4,10 @@ const DisplayName = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [errors, setErrors] = useState({ firstName: "", lastName: "" });
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevents page reload
     let newErrors = { firstName: "", lastName: "" };
 
     if (!firstName) newErrors.firstName = "Please fill out this field!";
@@ -13,9 +15,10 @@ const DisplayName = () => {
 
     setErrors(newErrors);
 
-    // If both fields are filled, proceed
+    // Proceed only if both fields are filled
     if (firstName && lastName) {
       setErrors({ firstName: "", lastName: "" }); // Clear errors
+      setSubmitted(true);
     }
   };
 
@@ -23,7 +26,7 @@ const DisplayName = () => {
     <div>
       <h1 style={{ fontFamily: "initial" }}>Full Name Display</h1>
 
-      <div style={{ display: "flex", alignItems:"flex-start", flexDirection: "column" }}>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <h3>First Name:</h3>
           <input
@@ -36,7 +39,7 @@ const DisplayName = () => {
         </div>
         {errors.firstName && <p style={{ color: "red", marginLeft: "10px" }}>{errors.firstName}</p>}
 
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
           <h3>Last Name:</h3>
           <input
             type="text"
@@ -47,13 +50,13 @@ const DisplayName = () => {
           />
         </div>
         {errors.lastName && <p style={{ color: "red", marginLeft: "10px" }}>{errors.lastName}</p>}
-      </div>
 
-      <button onClick={handleSubmit} style={{ padding: "8px 12px", fontSize: "16px", cursor: "pointer" }}>
-        Submit
-      </button>
+        <button type="submit" style={{ marginTop: "15px", padding: "8px 12px", fontSize: "16px", cursor: "pointer" }}>
+          Submit
+        </button>
+      </form>
 
-      {firstName && lastName && <h2 style={{ marginTop: "20px" }}>Full Name: {firstName} {lastName}</h2>}
+      {submitted && firstName && lastName&& <h2 style={{ marginTop: "20px" }}>Full Name: {firstName} {lastName}</h2>}
     </div>
   );
 };
